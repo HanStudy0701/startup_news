@@ -45,6 +45,27 @@ export const RSS_SOURCES: RssSource[] = [
     weight: 2,
     category: "daily",
   },
+  {
+    name: "Wired AI",
+    url: "https://www.wired.com/feed/tag/ai/latest/rss",
+    topics: ["AI"],
+    weight: 2,
+    category: "daily",
+  },
+  {
+    name: "Ars Technica AI",
+    url: "https://feeds.arstechnica.com/arstechnica/index",
+    topics: ["AI", "tech"],
+    weight: 2,
+    category: "daily",
+  },
+  {
+    name: "Import AI",
+    url: "https://importai.substack.com/feed",
+    topics: ["AI"],
+    weight: 2,
+    category: "daily",
+  },
 
   // ── Startup Cases ────────────────────────────────────────────
   {
@@ -82,6 +103,13 @@ export const RSS_SOURCES: RssSource[] = [
     url: "https://techcrunch.com/category/venture/feed/",
     topics: ["VC"],
     weight: 2,
+    category: "funding",
+  },
+  {
+    name: "Crunchbase News",
+    url: "https://news.crunchbase.com/feed/",
+    topics: ["VC", "funding"],
+    weight: 3,
     category: "funding",
   },
 

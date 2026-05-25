@@ -44,7 +44,7 @@ export default function NewsTabView({ initialArticles }: NewsTabViewProps) {
       if (res.ok) {
         const data = await res.json();
         setArticles(data);
-        setRefreshMsg("已更新！");
+        setRefreshMsg("已重新整理！");
         setTimeout(() => setRefreshMsg(""), 3000);
       }
     } catch {
@@ -87,7 +87,7 @@ export default function NewsTabView({ initialArticles }: NewsTabViewProps) {
             disabled={isRefreshing}
             className="text-xs px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isRefreshing ? "更新中..." : "⟳ 手動更新"}
+            {isRefreshing ? "載入中..." : "⟳ 重新整理列表"}
           </button>
         </div>
       </div>
