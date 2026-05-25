@@ -72,13 +72,15 @@ export async function GET(request: NextRequest) {
       savedArticles = data || [];
     }
 
-    // 5. Fetch today's top articles for digest (include previously saved)
+    // 5. Fetch top articles for digest — use 7-day window so digest always has content
     const { data: topArticles } = await supabase
       .from("articles")
       .select("*")
-      .gte("published_at", new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString())
+      .gte("published_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
       .order("published_at", { ascending: false })
       .limit(20);
+
+    console.log(`Found ${topArticles?.length ?? 0} articles for digest (7-day window)`);
 
     if (!topArticles?.length) {
       return NextResponse.json({ message: "No articles to digest" });
