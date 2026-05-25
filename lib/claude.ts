@@ -72,7 +72,7 @@ interface DigestResult {
   further_reading_ids: string[];
 }
 
-export async function generateDailyDigest(articles: Article[]): Promise<DigestResult | null> {
+export async function generateDailyDigest(articles: Article[]): Promise<DigestResult> {
   try {
     const articleList = articles
       .slice(0, 20)
