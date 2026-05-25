@@ -88,9 +88,6 @@ export async function GET(request: NextRequest) {
     // 6. Generate daily digest with Gemini
     console.log("Generating daily digest...");
     const digestResult = await generateDailyDigest(topArticles);
-    if (!digestResult) {
-      return NextResponse.json({ error: "Digest generation failed" }, { status: 500 });
-    }
 
     // 7. Fetch further reading articles
     const { data: furtherArticles } = digestResult.further_reading_ids.length
@@ -137,6 +134,9 @@ export async function GET(request: NextRequest) {
     });
   } catch (err) {
     console.error("Daily digest cron failed:", err);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return NextResponse.json({
+      error: "Internal error",
+      detail: err instanceof Error ? err.message : String(err),
+    }, { status: 500 });
   }
 }

@@ -109,7 +109,7 @@ Include 3-4 top_stories and 3-5 further_reading_ids.`,
     return JSON.parse(cleaned) as DigestResult;
   } catch (err) {
     console.error("Gemini daily digest failed:", err);
-    return null;
+    throw err;
   }
 }
 
