@@ -11,7 +11,7 @@ function getClient() {
   return _client;
 }
 
-const MODEL = "gemini-2.0-flash";
+const MODEL = "gemini-2.0-flash-lite";
 
 async function generateContent(prompt: string, systemInstruction: string): Promise<string> {
   const model = getClient().getGenerativeModel({
