@@ -8,7 +8,6 @@ async function getRecentArticles(): Promise<Article[]> {
   const { data } = await supabase
     .from("articles")
     .select("*")
-    .gte("published_at", new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString())
     .order("published_at", { ascending: false })
     .limit(80);
 
