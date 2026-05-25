@@ -28,8 +28,8 @@ function ImportanceBadge({ isBreaking }: { isBreaking: boolean }) {
 }
 
 export default function ArticleCard({ article }: ArticleCardProps) {
-  const { language } = useLanguage();
-  const isZh = language === "zh";
+  const { lang } = useLanguage();
+  const isZh = lang === "zh";
 
   const summary = isZh
     ? article.summary_zh || article.summary_en
