@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
       sea_opportunity_zh: digestResult.sea_opportunity_zh,
       further_reading: furtherArticles || [],
       published_at: new Date().toISOString(),
-    });
+    }, { onConflict: "date" });
 
     if (digestError) {
       console.error("Digest save error:", digestError);
