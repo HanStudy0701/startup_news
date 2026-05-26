@@ -72,12 +72,26 @@ export async function GET(request: NextRequest) {
       savedArticles = data || [];
     }
 
-    // 5. Fetch top articles for digest — no time filter, always use latest 20 articles
-    const { data: topArticles } = await supabase
+    // 5. Fetch top articles for digest — prefer today's articles, fall back to last 48h
+    const todayStart = `${today}T00:00:00.000Z`;
+    let { data: topArticles } = await supabase
       .from("articles")
       .select("*")
+      .gte("published_at", todayStart)
       .order("published_at", { ascending: false })
       .limit(20);
+
+    // If fewer than 5 articles today, widen to last 48h
+    if (!topArticles || topArticles.length < 5) {
+      const cutoff48h = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+      const { data: wider } = await supabase
+        .from("articles")
+        .select("*")
+        .gte("published_at", cutoff48h)
+        .order("published_at", { ascending: false })
+        .limit(20);
+      topArticles = wider;
+    }
 
     console.log(`Found ${topArticles?.length ?? 0} articles for digest`);
 

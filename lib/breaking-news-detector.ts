@@ -19,7 +19,7 @@ export async function processBreakingNews(articles: Article[]): Promise<void> {
 
     await sendPushToAll(
       `⚡ Breaking: ${article.source}`,
-      article.title,
+      article.title_zh || article.title,
       article.url
     );
 
