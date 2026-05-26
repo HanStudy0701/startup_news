@@ -25,7 +25,7 @@ export default async function HomePage() {
           AI 新創情報
         </h1>
         <p className="text-white/40 text-sm">
-          每天 09:00 自動更新 · 12 個來源 · 4 大分類
+          每天 09:00 自動更新（馬來西亞／台灣時間 UTC+8）· 15 個來源 · 4 大分類
         </p>
       </div>
 
