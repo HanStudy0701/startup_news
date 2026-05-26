@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { TOPIC_TAGS } from "@/types";
 
@@ -60,6 +61,25 @@ export default function SettingsPage() {
             "登入後可自訂主題偏好（即將推出）"
           )}
         </p>
+      </section>
+
+      {/* Data sources */}
+      <section className="space-y-3">
+        <h2 className="text-xs font-bold uppercase tracking-widest text-white/40">
+          {t("Data Sources", "資料來源")}
+        </h2>
+        <Link
+          href="/sources"
+          className="flex items-center justify-between px-4 py-3 rounded-xl bg-surface-card border border-white/5 hover:border-white/10 transition-colors"
+        >
+          <div>
+            <p className="text-sm text-white">{t("News Sources", "新聞來源列表")}</p>
+            <p className="text-xs text-white/40 mt-0.5">
+              {t("16 websites across 4 categories", "16 個網站 · 4 大分類")}
+            </p>
+          </div>
+          <span className="text-white/30 text-sm">→</span>
+        </Link>
       </section>
     </div>
   );
