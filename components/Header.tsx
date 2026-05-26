@@ -7,7 +7,7 @@ import NotificationButton from "@/components/NotificationButton";
 
 const NAV = [
   { href: "/", label: "Today" },
-  { href: "/archive", label: "Archive" },
+  { href: "/broadcast", label: "播報" },
   { href: "/settings", label: "Settings" },
 ];
 

@@ -115,10 +115,15 @@ export async function GET(request: NextRequest) {
     }
 
     // 9. Send push notification
+    const topHeadline = digestResult.top_stories[0]?.headline_zh
+      || digestResult.top_stories[0]?.headline_en
+      || null;
     await sendPushToAll(
-      "StartupLens Daily Digest",
-      `Today's top startup stories are ready — ${digestResult.top_stories.length} stories curated for you.`,
-      "/"
+      "📻 StartupLens 今日播報",
+      topHeadline
+        ? `${topHeadline} — 共 ${digestResult.top_stories.length} 則精選報導`
+        : `今日共 ${digestResult.top_stories.length} 則精選報導，點擊查看`,
+      "/broadcast"
     );
 
     return NextResponse.json({
