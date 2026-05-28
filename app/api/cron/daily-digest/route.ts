@@ -3,6 +3,7 @@ import { fetchAllRssArticles } from "@/lib/rss";
 import { generateArticleSummary, generateDailyDigest } from "@/lib/claude";
 import { createServiceClient } from "@/lib/supabase";
 import { sendPushToAll } from "@/lib/push";
+import { lineBroadcast, buildDigestMessage } from "@/lib/line";
 
 // Triggered by GitHub Actions at "0 1 * * *" UTC = 9am Taiwan/Malaysia Time
 // Accepts optional ?date=YYYY-MM-DD for manual backfill (skips RSS fetch, uses existing articles)
@@ -158,11 +159,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Digest save failed" }, { status: 500 });
     }
 
-    // 9. Send push notification (skip for backfill to avoid notifying old news)
+    // 9. Send push + LINE notifications (skip for backfill to avoid notifying old news)
     if (!isBackfill) {
-      const topHeadline = digestResult.top_stories[0]?.headline_zh
-        || digestResult.top_stories[0]?.headline_en
-        || null;
+      const topStory = digestResult.top_stories[0];
+      const topHeadline = topStory?.headline_zh || topStory?.headline_en || null;
+      const whyItMatters = topStory?.why_it_matters_zh || topStory?.why_it_matters_en || "";
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://startuplens-blue.vercel.app";
+
+      // Web push
       await sendPushToAll(
         "📻 StartupLens 今日播報",
         topHeadline
@@ -170,6 +174,19 @@ export async function GET(request: NextRequest) {
           : `今日共 ${digestResult.top_stories.length} 則精選報導，點擊查看`,
         "/broadcast"
       );
+
+      // LINE broadcast (only if token is configured)
+      if (process.env.LINE_CHANNEL_ACCESS_TOKEN && topHeadline) {
+        const lineMessages = buildDigestMessage(
+          topHeadline,
+          whyItMatters,
+          digestResult.top_stories.length,
+          appUrl
+        );
+        await lineBroadcast(lineMessages).catch((err) =>
+          console.error("LINE broadcast error:", err)
+        );
+      }
     }
 
     return NextResponse.json({
