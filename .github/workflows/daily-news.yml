@@ -1,8 +1,8 @@
-name: Daily AI News Collection
+name: Hourly AI News Collection
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # UTC 01:00 = Taiwan/Malaysia time 09:00 (UTC+8)
+    - cron: '5 * * * *'  # Every hour at :05 past (e.g. 09:05, 10:05 MYT = 01:05, 02:05 UTC)
   workflow_dispatch:
     inputs:
       date:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger Daily News Collection
+      - name: Trigger News Collection
         run: |
           DATE_PARAM="${{ github.event.inputs.date }}"
           if [ -n "$DATE_PARAM" ]; then
@@ -42,4 +42,4 @@ jobs:
       - name: Log Result
         run: |
           echo "Triggered at $(date -u)"
-          echo "Next scheduled run: UTC 01:00 daily (Taiwan/Malaysia 09:00)"
+          echo "Next run: ~1 hour from now"

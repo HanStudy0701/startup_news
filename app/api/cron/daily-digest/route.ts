@@ -24,16 +24,19 @@ export async function GET(request: NextRequest) {
   const isBackfill = !!dateParam;
 
   try {
-    // Guard: skip if today's digest already exists (prevents duplicate runs from wasting quota)
+    // Guard: skip if digest was updated in the last 55 minutes (prevents rapid-fire duplicates)
     if (!isBackfill) {
       const { data: existing } = await supabase
         .from("daily_digests")
-        .select("date")
+        .select("date, published_at")
         .eq("date", today)
         .maybeSingle();
-      if (existing) {
-        console.log(`Digest for ${today} already exists — skipping to preserve quota`);
-        return NextResponse.json({ skipped: true, reason: "digest_exists", date: today });
+      if (existing?.published_at) {
+        const minutesSince = (Date.now() - new Date(existing.published_at).getTime()) / 60000;
+        if (minutesSince < 55) {
+          console.log(`Last run was ${Math.round(minutesSince)}m ago — skipping to preserve quota`);
+          return NextResponse.json({ skipped: true, reason: "too_recent", minutesSince: Math.round(minutesSince) });
+        }
       }
     }
 
